@@ -3,7 +3,7 @@ class Menu extends Phaser.State {
     name_input: PhaserInput.InputField;
     code_input: PhaserInput.InputField;
     status_text: Phaser.Text;
-    buttons: Phaser.Graphics[];
+    buttons: UIButton[];
     busy: boolean;
     message: string;
 
@@ -23,7 +23,7 @@ class Menu extends Phaser.State {
         this.draw_logo();
 
         let field_style = {
-            font: '18px Arial',
+            font: UI.BODY - 2 + 'px Arial',
             fill: '#212121',
             fontWeight: 'bold',
             padding: 8,
@@ -33,7 +33,7 @@ class Menu extends Phaser.State {
             type: PhaserInput.InputType.text
         };
 
-        this.name_input = this.game.add.inputField(300, 290, (<any>Object).assign({
+        this.name_input = this.game.add.inputField(300, 280, (<any>Object).assign({
             width: 200,
             max: '14',
             placeHolder: 'Username'
@@ -41,48 +41,53 @@ class Menu extends Phaser.State {
         this.name_input.setText(this.load_pref('sqrz_name'));
 
         // Create a host button
-        this.make_button(300, 340, 216, 46, "Host Game!", () => this.host_game());
+        this.buttons.push(UI.button(this.game, 300, 330, 216, 46, "Host Game!", () => this.host_game()));
 
-        this.game.add.text(400, 418, "or join a friend's room", {
-            font: '16px Arial',
-            fill: '#9a9a9a'
-        }).anchor.set(0.5);
+        UI.text(this.game, 400, 395, "or join a friend's room", UI.SMALL, UI.GRAY, false, undefined, 0.5);
 
-        this.code_input = this.game.add.inputField(300, 440, (<any>Object).assign({
+        this.code_input = this.game.add.inputField(300, 420, (<any>Object).assign({
             width: 100,
             max: '4',
             placeHolder: 'CODE',
             forceCase: PhaserInput.ForceCase.upper,
             textAlign: 'center'
         }, field_style));
-        // Invite links look like ?room=ABCD
-        let match = /[?&]room=([A-Za-z]{4})/.exec(window.location.search);
-        if (match) this.code_input.setText(match[1].toUpperCase());
 
         // Create a join button
-        this.make_button(426, 440, 90, 36, "Join!", () => this.join_game());
+        this.buttons.push(UI.button(this.game, 426, 420, 90, 36, "Join!", () => this.join_game()));
 
-        this.status_text = this.game.add.text(400, 530, this.message, {
-            font: '18px Arial',
-            fill: '#ff5d73',
-            align: 'center'
-        });
-        this.status_text.anchor.set(0.5);
+        // Tutorial
+        this.buttons.push(UI.button(this.game, 300, 480, 216, 36, "How to Play", () => this.game.state.start('Tutorial')));
+
+        this.status_text = UI.text(this.game, 400, 540, this.message, UI.BODY - 2, UI.RED, true, undefined, 0.5);
+
+        this.handle_invite();
+    }
+
+    // Invite links look like ?room=ABCD and take you straight to that room's lobby
+    handle_invite() {
+        let match = /[?&]room=([A-Za-z]{4})/.exec(window.location.search);
+        if (!match) return;
+        let code = match[1].toUpperCase();
+        this.code_input.setText(code);
+        // Only use the link once, so leaving the room doesn't send you back in
+        window.history.replaceState(null, '', window.location.pathname);
+        if (this.message) return;
+        if (this.name_input.value.trim()) {
+            this.join_game();
+        } else {
+            this.show_status("Enter a name, then click Join! to join room " + code + ".", UI.WHITE);
+            this.name_input.startFocus();
+        }
     }
 
     // Big title with a little square being "drawn" next to it
     draw_logo() {
-        let title = this.game.add.text(400, 120, "sqrz", {
-            font: 'bold 96px Arial',
-            fill: '#ffffff'
-        });
+        let title = this.game.add.text(400, 120, "sqrz", UI.style(96, UI.WHITE, true));
         title.anchor.set(0.5);
         this.game.add.tween(title).to({ y: 128 }, 1400, Phaser.Easing.Sinusoidal.InOut, true, 0, -1, true);
 
-        this.game.add.text(400, 200, "a game about connecting squares", {
-            font: '20px Arial',
-            fill: '#9a9a9a'
-        }).anchor.set(0.5);
+        UI.text(this.game, 400, 190, "a game about connecting squares", UI.BODY, UI.GRAY, false, undefined, 0.5);
 
         // Four dots, four coloured sides, one filled square, on loop
         let x = 535, y = 90, s = 44;
@@ -119,29 +124,6 @@ class Menu extends Phaser.State {
         });
     }
 
-    make_button(x: number, y: number, w: number, h: number, label: string, onClick: () => void) {
-        let button = this.game.add.graphics(x, y);
-        // Draw the button
-        button.beginFill(0xFFFFFF);
-        button.drawRoundedRect(0, 0, w, h, 6);
-        button.endFill();
-        // Enable button input
-        button.inputEnabled = true;
-        button.input.useHandCursor = true;
-        button.events.onInputOver.add(() => button.tint = 0xdddddd);
-        button.events.onInputOut.add(() => button.tint = 0xffffff);
-        // Create a listener
-        button.events.onInputDown.add(() => { if (!this.busy) onClick(); });
-        // Add text to the button
-        let text = this.game.add.text(x + w / 2, y + h / 2 + 2, label, {
-            font: 'bold 20px Arial',
-            fill: 'black'
-        });
-        text.anchor.set(0.5);
-        this.buttons.push(button);
-        return button;
-    }
-
     username(): string {
         let name = this.name_input.value.trim();
         if (!name) {
@@ -154,6 +136,7 @@ class Menu extends Phaser.State {
     }
 
     host_game() {
+        if (this.busy) return;
         let name = this.username();
         if (!name) return;
         this.set_busy("Creating a room...");
@@ -164,6 +147,7 @@ class Menu extends Phaser.State {
     }
 
     join_game() {
+        if (this.busy) return;
         let code = this.code_input.value.trim().toUpperCase();
         if (!/^[A-Z]{4}$/.test(code)) {
             this.show_status("Room codes are 4 letters.");
@@ -181,17 +165,17 @@ class Menu extends Phaser.State {
 
     set_busy(msg: string) {
         this.busy = true;
-        this.buttons.forEach((b) => b.alpha = 0.5);
-        this.show_status(msg, '#ffffff');
+        this.buttons.forEach((b) => b.setEnabled(false));
+        this.show_status(msg, UI.WHITE);
     }
 
     fail(msg: string) {
         this.busy = false;
-        this.buttons.forEach((b) => b.alpha = 1);
+        this.buttons.forEach((b) => b.setEnabled(true));
         this.show_status(msg);
     }
 
-    show_status(msg: string, color = '#ff5d73') {
+    show_status(msg: string, color = UI.RED) {
         this.status_text.text = msg;
         this.status_text.fill = color;
     }

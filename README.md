@@ -4,7 +4,9 @@ Game about connecting squares. Making for Software Tools class.
 Play at https://sqrz.drowsy.games
 
 ## How to play
-One player clicks Host Game and gets a 4-letter room code. Other players enter the code and click Join. The host can click the code to copy an invite link.
+One player clicks Host Game and gets a 4-letter room code. Other players enter the code and click Join, or open the invite link (`?room=CODE`), which goes straight to the lobby. In the lobby the host picks a board size from 2x2 to 10x10 and clicks Start Game. Any number of players can join, but you need at least 2.
+
+The How to Play button on the menu explains the rules with examples.
 
 Players take turns drawing a line between two neighboring dots. Closing a square scores a point and gives you another turn. The game ends when the grid is full. The player with the most squares wins.
 

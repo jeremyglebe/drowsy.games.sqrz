@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>sqrz</title>
     <meta name="description" content="A game about connecting squares. Play dots and boxes with friends, right in the browser.">
+    <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
+
+    <!-- What shows up when someone pastes a link in a chat -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sqrz.drowsy.games/">
+    <meta property="og:title" content="sqrz">
+    <meta property="og:description" content="A game about connecting squares. Play with friends in your browser.">
+    <meta property="og:image" content="https://sqrz.drowsy.games/assets/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
     <style>
         html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
         /* Phaser fits the game inside this div, so it needs the full window size */
@@ -18,12 +30,14 @@
 
     <!-- SERVICES -->
     <script src="./js/services/DeviceService.js"></script>
+    <script src="./js/services/UI.js"></script>
     <script src="./js/services/HostService.js"></script>
     <script src="./js/services/NetworkService.js"></script>
 
     <!-- GAME STATES -->
     <script src="./js/states/Boot.js"></script>
     <script src="./js/states/Menu.js"></script>
+    <script src="./js/states/Tutorial.js"></script>
     <script src="./js/states/Sqrz.js"></script>
 
 </head>

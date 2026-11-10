@@ -5,6 +5,7 @@ var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'game');
 game.state.add('Boot', Boot);
 game.state.add('Sqrz', Sqrz);
 game.state.add('Menu', Menu);
+game.state.add('Tutorial', Tutorial);
 
 // Start the game
 game.state.start('Boot');
