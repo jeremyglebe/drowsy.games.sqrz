@@ -9,7 +9,7 @@ var DeviceService = /** @class */ (function () {
     Object.defineProperty(DeviceService, "Instance", {
         // Get or create the instance of the service
         get: function () { return this._instance || (this._instance = new this()); },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return DeviceService;

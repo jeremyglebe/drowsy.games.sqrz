@@ -4,26 +4,27 @@
   "description": "A game about connecting squares",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "build": "tsc -p .",
+    "watch": "tsc -p . --watch"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jeremyglebe/sqrz.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Jeremy Glebe",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/jeremyglebe/sqrz/issues"
   },
-  "homepage": "https://github.com/jeremyglebe/sqrz#readme",
+  "homepage": "https://sqrz.drowsy.games",
   "dependencies": {
-    "@types/express": "^4.16.1",
-    "@types/socket.io": "^2.1.2",
-    "@types/socket.io-client": "^1.4.32",
-    "phaser": "^2.6.2",
-    "socketio": "^1.0.0"
+    "express": "^4.16.4",
+    "peerjs": "^1.5.5",
+    "phaser": "^2.6.2"
   },
   "devDependencies": {
-    "@azerion/phaser-input": "^2.0.5"
+    "@azerion/phaser-input": "^2.0.5",
+    "typescript": "^5.9.3"
   }
 }

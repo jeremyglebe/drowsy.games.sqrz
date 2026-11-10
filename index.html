@@ -1,12 +1,23 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
-    <!-- MODULES -->
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="./node_modules/phaser/build/phaser.min.js"></script>
-    <script src="node_modules/@azerion/phaser-input/build/phaser-input.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>sqrz</title>
+    <meta name="description" content="A game about connecting squares. Play dots and boxes with friends, right in the browser.">
+    <style>
+        html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+    </style>
+
+    <!-- MODULES (from a CDN so the game can be hosted as plain static files) -->
+    <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.5/dist/peerjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@2.6.2/build/phaser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@azerion/phaser-input@2.0.5/build/phaser-input.min.js"></script>
 
     <!-- SERVICES -->
     <script src="./js/services/DeviceService.js"></script>
+    <script src="./js/services/HostService.js"></script>
+    <script src="./js/services/NetworkService.js"></script>
 
     <!-- GAME STATES -->
     <script src="./js/states/Boot.js"></script>
@@ -18,3 +29,4 @@
     <script src="./js/app.js"></script>
     <div id="game"></div>
 </body>
+</html>

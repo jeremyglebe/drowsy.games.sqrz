@@ -1,13 +1,16 @@
 {
     "compilerOptions": {
         "target": "es5",
+        "lib": ["es2015", "dom"],
         "outDir": "js",
         "sourceMap": true,
-        "watch": true
+        "skipLibCheck": true,
+        "types": []
     },
     "files": [
         "node_modules/phaser/typescript/phaser.d.ts",
         "special_defs/phaser-input.d.ts",
+        "special_defs/peerjs.d.ts",
         "node_modules/phaser/typescript/pixi.d.ts"
     ],
     "include": [
